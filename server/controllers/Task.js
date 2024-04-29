@@ -23,7 +23,7 @@ const createTask = async (req, res) => {
   }
 };
 
-const updateTask = async (req, res) => {
+const updateStatus = async (req, res) => {
   try {
     const todo = await tasklist.findById(req.params.id);
     todo.completed = !todo.completed;
@@ -31,6 +31,22 @@ const updateTask = async (req, res) => {
     res.json(updatedTodo);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+const updateTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { taskDescription } = req.body;
+
+    const updatedTask = await tasklist.findByIdAndUpdate(
+      id,
+      { taskDescription },
+      { new: true }
+    );
+    res.json(updatedTask);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -43,4 +59,4 @@ const deleteTask = async (req, res) => {
   }
 };
 
-module.exports = { getTasks, createTask, updateTask, deleteTask };
+module.exports = { getTasks, createTask, updateStatus, deleteTask, updateTask };
